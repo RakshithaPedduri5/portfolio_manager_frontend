@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Manager</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <button id="add-asset-btn" class="dropdown-btn">Add Asset &#9662;</button>
+                <div id="add-asset-dropdown" class="dropdown-content">
+                    <a href="#">Gold</a>
+                    <a href="#">Equity</a>
+                    <a href="#">Stocks</a>
+                    <a href="#">Mutual Funds</a>
+                    <a href="#">Real Estate</a>
+                </div>
+            </div>
+            <button class="sidebar-action" id="remove-asset-btn">Remove Asset</button>
+            <button class="sidebar-action" id="edit-asset-btn">Edit Asset</button>
+            <button class="sidebar-action" id="nav-logs">Trade Logs</button>
+            <button class="sidebar-action" id="nav-tax">Tax Calculator</button>
+        </aside>
+        <main class="main-content">
+            <section id="dashboard-section" class="active">
+                <h1 class="dashboard-title">DASHBOARD</h1>
+                <div class="dashboard-cards">
+                    <div class="dashboard-card clickable" id="asset1-card" aria-label="View Asset 1">
+                        <h2>Asset 1</h2>
+                        <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">
+                            <div>Invested: <span id="asset1-invested"></span> <span style="color:#888;font-size:0.95em;">(+5% YTD)</span></div>
+                            <div>Profit: <span id="asset1-profit"></span> <span style="color:#388e3c;font-size:0.95em;">Last txn: +₹2,000</span></div>
+                            <div>Loss: <span id="asset1-loss"></span> <span style="color:#d32f2f;font-size:0.95em;">Note: Minor dip in July</span></div>
+                        </div>
+                        <div style="margin-top:10px;font-size:0.98em;color:#555;">
+                            <div>Type: <span>Gold</span></div>
+                            <div>Last Updated: <span>Aug 2025</span></div>
+                            <div>Status: <span style="color:#388e3c;font-weight:600;">Active</span></div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card clickable" id="asset2-card" aria-label="View Asset 2">
+                        <h2>Asset 2</h2>
+                        <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">
+                            <div>Invested: <span id="asset2-invested"></span> <span style="color:#888;font-size:0.95em;">(+8% YTD)</span></div>
+                            <div>Profit: <span id="asset2-profit"></span> <span style="color:#388e3c;font-size:0.95em;">Last txn: +₹3,500</span></div>
+                            <div>Loss: <span id="asset2-loss"></span> <span style="color:#d32f2f;font-size:0.95em;">Note: Volatility in June</span></div>
+                        </div>
+                        <div style="margin-top:10px;font-size:0.98em;color:#555;">
+                            <div>Type: <span>Stocks</span></div>
+                            <div>Last Updated: <span>Aug 2025</span></div>
+                            <div>Status: <span style="color:#388e3c;font-weight:600;">Active</span></div>
+                        </div>
+                        <canvas id="asset2-chart" width="120" height="60" style="background:#f4f6f8; margin-top:8px;"></canvas>
+                        <noscript>
+                            <img src="https://quickchart.io/chart?c={type:'line',data:{labels:['Jun','Jul','Aug','Sep','Oct','Nov'],datasets:[{label:'Performance',data:[130,150,170,160,180,190]}]}}" alt="Asset 2 Performance Chart" style="width:100%;margin-top:8px;"/>
+                        </noscript>
+                    </div>
+                </div>
+                <div class="dashboard-performers" style="display:flex;align-items:flex-start;gap:32px;">
+                    <div style="flex:1;">
+                        <h3>Top performers (top 2 only):</h3>
+                        <div id="top-performer-a"></div>
+                        <div id="top-performer-b"></div>
+                    </div>
+                    <!-- Removed main-performance-chart from here -->
+                    <div style="flex:1;max-width:220px;display:flex;flex-direction:column;align-items:center;">
+                        <canvas id="top-performers-pie" width="180" height="180" style="margin-bottom:8px;"></canvas>
+                        <noscript>
+                            <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['Asset 1','Asset 2'],datasets:[{data:[60,40]}]}}" alt="Top Performers Pie Chart" style="width:180px;height:180px;"/>
+                        </noscript>
+                        <ul class="pie-legend" style="margin-top:8px;">
+                            <li><span class="dot gold"></span>Asset 1 <span class="percent">60%</span></li>
+                            <li><span class="dot stocks"></span>Asset 2 <span class="percent">40%</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dashboard-pie-section" style="display:flex;align-items:flex-start;gap:32px;">
+                    <div style="flex:1;max-width:220px;display:flex;flex-direction:column;align-items:center;">
+                        <h3 style="margin-bottom:8px;">Total investments across all assets</h3>
+                        <canvas id="dashboard-pie" width="200" height="200"></canvas>
+                        <noscript>
+                            <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['Gold','Stocks','Equity','Mutual Funds','Others'],datasets:[{data:[30,25,20,15,10]}]}}" alt="Total Investments Pie Chart" style="width:200px;height:200px;"/>
+                        </noscript>
+                        <ul class="pie-legend">
+                            <li><span class="dot gold"></span>Gold <span class="percent">30%</span></li>
+                            <li><span class="dot stocks"></span>Stocks <span class="percent">25%</span></li>
+                            <li><span class="dot equity"></span>Equity <span class="percent">20%</span></li>
+                            <li><span class="dot mutual"></span>Mutual Funds <span class="percent">15%</span></li>
+                            <li><span class="dot others"></span>Others <span class="percent">10%</span></li>
+                        </ul>
+                    </div>
+                    <div style="flex:1;max-width:220px;display:flex;flex-direction:column;align-items:center;">
+                        <h3 style="margin-bottom:8px;">Asset Allocation</h3>
+                        <canvas id="dashboard-pie-2" width="200" height="200"></canvas>
+                        <noscript>
+                            <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['Gold','Stocks','Equity','Mutual Funds','Others'],datasets:[{data:[25,30,25,10,10]}]}}" alt="Asset Allocation Pie Chart" style="width:200px;height:200px;"/>
+                        </noscript>
+                        <ul class="pie-legend">
+                            <li><span class="dot gold"></span>Gold <span class="percent">25%</span></li>
+                            <li><span class="dot stocks"></span>Stocks <span class="percent">30%</span></li>
+                            <li><span class="dot equity"></span>Equity <span class="percent">25%</span></li>
+                            <li><span class="dot mutual"></span>Mutual Funds <span class="percent">10%</span></li>
+                            <li><span class="dot others"></span>Others <span class="percent">10%</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section id="asset-section">
+                <h1 class="dashboard-title">Asset Page</h1>
+                <div class="asset-grid">
+                    <div class="asset-performance">
+                        <h2>Current Performance</h2>
+                        <canvas id="asset-performance-chart" width="400" height="180"></canvas>
+                        <noscript>
+                            <img src="https://quickchart.io/chart?c={type:'line',data:{labels:['Jun','Jul','Aug','Sep','Oct','Nov'],datasets:[{label:'Performance',data:[130,150,170,160,180,175,190]}]}}" alt="Current Performance Chart" style="width:100%;"/>
+                        </noscript>
+                        <div style="margin-top:24px;">
+                            <canvas id="main-performance-chart" width="300" height="120"></canvas>
+                            <noscript>
+                                <img src="https://quickchart.io/chart?c={type:'line',data:{labels:['Jun','Jul','Aug','Sep','Oct','Nov'],datasets:[{label:'Performance',data:[130,150,170,160,180,190]}]}}" alt="Performance Chart" style="width:100%;margin-top:8px;"/>
+                            </noscript>
+                        </div>
+                    </div>
+                    <div class="asset-summary">
+                        <h2>$+</h2>
+                        <div>Gain/Loss Summary</div>
+                    </div>
+                    <div class="asset-stock-info">
+                        <h2>Stock Info</h2>
+                        <div>Previous Close <span>192.50</span></div>
+                        <div>Day Range <span>189.00–194.00</span></div>
+                        <div>52 Week Range <span>143.00–198.00</span></div>
+                    </div>
+                    <div class="asset-investments">
+                        <h2>Your Current Investments</h2>
+                        <canvas id="asset-investments-pie" width="180" height="180"></canvas>
+                        <noscript>
+                            <img src="https://quickchart.io/chart?c={type:'pie',data:{labels:['A','B','C'],datasets:[{data:[40,35,25]}]}}" alt="Your Current Investments Pie Chart" style="width:180px;height:180px;"/>
+                        </noscript>
+                    </div>
+                </div>
+            </section>
+            <section id="logs-section">
+                <h1>Trade Logs</h1>
+                <div>[Trade logs table coming soon]</div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+    <script>
+    // Draw main performance chart near Top Performers
+    function drawLineChart(canvasId, data, color) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let step = canvas.width / (data.length-1);
+        data.forEach((y, i) => {
+            let px = i * step;
+            let py = canvas.height - (y-120)*canvas.height/100;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        data.forEach((y, i) => {
+            let px = i * step;
+            let py = canvas.height - (y-120)*canvas.height/100;
+            ctx.lineTo(px, py);
+        });
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+    drawLineChart('main-performance-chart', [130,150,170,160,180,190], '#3578e5');
+
+    // Draw pie chart for Top Performers and dashboard pies
+    function drawPieChart(canvasId, data, colors) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const total = data.reduce((a, b) => a + b, 0);
+        let startAngle = -0.5 * Math.PI;
+        data.forEach((value, i) => {
+            const sliceAngle = (value / total) * 2 * Math.PI;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width/2, canvas.height/2);
+            ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.width, canvas.height)/2-6, startAngle, startAngle + sliceAngle);
+            ctx.closePath();
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+            startAngle += sliceAngle;
+        });
+    }
+    // Top Performers Pie
+    drawPieChart('top-performers-pie', [60, 40], ['#ffd700', '#1976d2']);
+    // Dashboard Pie 1: Total investments
+    drawPieChart('dashboard-pie', [30, 25, 20, 15, 10], ['#ffd700', '#1976d2', '#43a047', '#ffb300', '#bdbdbd']);
+    // Dashboard Pie 2: Asset Allocation
+    drawPieChart('dashboard-pie-2', [25, 30, 25, 10, 10], ['#ffd700', '#1976d2', '#43a047', '#ffb300', '#bdbdbd']);
+    </script>
+    <script>
+    // Ensure navigation works after DOM is loaded
+    window.addEventListener('DOMContentLoaded', function() {
+        // Redirect Add Asset dropdown
+        const addAssetDropdown = document.getElementById('add-asset-dropdown');
+        const assetLinks = addAssetDropdown.querySelectorAll('a');
+        assetLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'add-asset.html';
+            });
+        });
+        // Redirect Tax Calculator
+        document.getElementById('nav-tax').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'tax-calculator.html';
+        });
+        // Make asset cards clickable
+        document.getElementById('asset1-card').addEventListener('click', function() {
+            window.location.href = 'asset1.html';
+        });
+        document.getElementById('asset2-card').addEventListener('click', function() {
+            window.location.href = 'asset2.html';
+        });
+    });
+    </script>
+</body>
+</html>

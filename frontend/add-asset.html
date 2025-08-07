@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Asset</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container" style="justify-content:center;align-items:center;min-height:100vh;">
+        <main class="main-content" style="margin:0 auto;min-width:unset;box-shadow:none;">
+            <section class="add-asset-form active">
+                <form class="asset-form" id="addAssetForm">
+                    <h1>Add Asset</h1>
+                    <label>Name:<input type="text" value="Investment in Gold" name="name" required></label>
+                    <label>Asset Type:<input type="text" value="Gold" name="type" required></label>
+                    <label>Weight (g):<input type="number" value="50" name="weight" required></label>
+                    <label>Price/gm:<input type="number" value="5600" name="price" required></label>
+                    <label>Total Investment:<input type="text" value="₹ 280,000" name="investment" required></label>
+                    <label>Purchase Date:<input type="date" value="2024-04-26" name="date" required></label>
+                    <label>Purity:<input type="text" value="24K" name="purity" required></label>
+                    <button type="submit" class="tax-btn">Submit</button>
+                </form>
+                <div id="submitResponse" style="margin-top:20px;"></div>
+    <script>
+    document.getElementById('addAssetForm').onsubmit = function(e) {
+        e.preventDefault();
+        document.getElementById('submitResponse').innerHTML = '<span style="color:green;font-weight:600;">Asset details submitted successfully!</span>';
+    };
+    </script>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

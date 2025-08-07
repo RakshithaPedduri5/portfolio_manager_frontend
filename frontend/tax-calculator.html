@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container" style="justify-content:center;align-items:center;min-height:100vh;">
+        <main class="main-content" style="margin:0 auto;min-width:unset;box-shadow:none;">
+            <section class="add-asset-form active">
+                <form class="asset-form">
+                    <h1>Tax Calculator</h1>
+                    <label>Asset Type:
+                        <select>
+                            <option>Gold</option>
+                            <option>Equity</option>
+                            <option>Stock</option>
+                            <option>Mutual Fund</option>
+                            <option>Real Estate</option>
+                        </select>
+                    </label>
+                    <label>Ticker/Name:<input type="text" value="Investment in Gold"></label>
+                    <label>Buy Date:<input type="date" value="2024-04-26"></label>
+                    <label>Sell Price:<input type="text" value="₹5920"></label>
+                    <label>Quantity:<input type="number" value="50"></label>
+                    <button type="button" class="tax-btn" id="calcTaxBtn">CALCULATE TAX</button>
+                    <div class="tax-result" id="taxResult">
+                        <ul>
+                            <li>Capital Gain: -</li>
+                            <li>Holding Type: -</li>
+                            <li>Tax Rate: -</li>
+                            <li>Tax Payable: -</li>
+                        </ul>
+                    </div>
+                    <div class="tax-instructions">
+                        <strong>Instructions:</strong>
+                        <ul>
+                            <li>Select the correct asset type and fill in all fields.</li>
+                            <li>Click CALCULATE TAX to see your tax liability.</li>
+                            <li>Ensure your buy/sell prices and dates are accurate for correct calculation.</li>
+                        </ul>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+    <script>
+    function parseRupee(str) {
+        return parseFloat((str||'').replace(/[^\d.\-]/g, '')) || 0;
+    }
+    document.getElementById('calcTaxBtn').onclick = function() {
+        const assetType = document.querySelector('select').value;
+        const buyDate = new Date(document.querySelector('input[type="date"]:nth-of-type(1)').value);
+        const sellPrice = parseRupee(document.querySelector('input[type="text"][value^="₹"]').value);
+        const quantity = parseFloat(document.querySelector('input[type="number"]').value);
+        const buyPrice = 0; // Not in form, so assume 0 for now
+        let capitalGain = 0;
+        let holdingType = '-';
+        let taxRate = 0;
+        let taxPayable = 0;
+        // For demo, use fixed buy price for Gold
+        if(assetType==="Gold") {
+            // Assume buy price 5600, sell price from input
+            capitalGain = (sellPrice - 5600) * quantity;
+            // Holding type: STCG if <3 years, LTCG if >=3 years
+            const now = new Date();
+            const diffYears = (now-buyDate)/(1000*60*60*24*365);
+            holdingType = diffYears>=3 ? 'LTCG' : 'STCG';
+            taxRate = holdingType==='LTCG' ? 20 : 15;
+        } else if(assetType==="Equity"||assetType==="Stock") {
+            // Assume buy price 3200
+            capitalGain = (sellPrice - 3200) * quantity;
+            const now = new Date();
+            const diffYears = (now-buyDate)/(1000*60*60*24*365);
+            holdingType = diffYears>=1 ? 'LTCG' : 'STCG';
+            taxRate = holdingType==='LTCG' ? 10 : 15;
+        } else if(assetType==="Mutual Fund") {
+            // Assume buy price 1200
+            capitalGain = (sellPrice - 1200) * quantity;
+            const now = new Date();
+            const diffYears = (now-buyDate)/(1000*60*60*24*365);
+            holdingType = diffYears>=1 ? 'LTCG' : 'STCG';
+            taxRate = holdingType==='LTCG' ? 10 : 15;
+        } else if(assetType==="Real Estate") {
+            // Assume buy price 8000
+            capitalGain = (sellPrice - 8000) * quantity;
+            const now = new Date();
+            const diffYears = (now-buyDate)/(1000*60*60*24*365);
+            holdingType = diffYears>=2 ? 'LTCG' : 'STCG';
+            taxRate = holdingType==='LTCG' ? 20 : 30;
+        }
+        taxPayable = Math.max(0, Math.round(capitalGain * taxRate / 100));
+        document.getElementById('taxResult').innerHTML = `<ul>
+            <li>Capital Gain: ₹${capitalGain.toLocaleString('en-IN')}</li>
+            <li>Holding Type: ${holdingType}</li>
+            <li>Tax Rate: ${taxRate}%</li>
+            <li>Tax Payable: ₹${taxPayable.toLocaleString('en-IN')}</li>
+        </ul>`;
+    };
+    </script>
+</body>
+</html>
