@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset 2 Details</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container" style="justify-content:center;align-items:center;min-height:100vh;">
+        <main class="main-content" style="margin:0 auto;min-width:unset;box-shadow:none;">
+            <h1 class="dashboard-title">Asset Page</h1>
+            <div class="asset-grid">
+                <div class="asset-performance" style="display:flex;flex-direction:column;align-items:center;">
+                    <h2>Current Performance</h2>
+                    <canvas id="asset-performance-chart" width="400" height="180"></canvas>
+                    <div style="margin-top:18px;display:flex;flex-direction:column;gap:4px;align-items:flex-start;justify-content:center;">
+                        <div>Invested: <span id="asset2-invested">₹2,00,000</span> <span style="color:#888;font-size:0.95em;">(+8% YTD)</span></div>
+                        <div>Profit: <span id="asset2-profit">₹18,000</span> <span style="color:#388e3c;font-size:0.95em;">Last txn: +₹3,500</span></div>
+                        <div>Loss: <span id="asset2-loss">₹3,500</span> <span style="color:#d32f2f;font-size:0.95em;">Note: Volatility in June</span></div>
+                    </div>
+                    <div style="margin-top:10px;font-size:0.98em;color:#555;">
+                        <div>Type: <span>Stocks</span></div>
+                        <div>Last Updated: <span>Aug 2025</span></div>
+                        <div>Status: <span style="color:#388e3c;font-weight:600;">Active</span></div>
+                    </div>
+                    <div style="margin-top:32px;width:220px;">
+                        <h3 style="text-align:center;font-size:1.1em;margin-bottom:8px;">Your Current Investments</h3>
+                        <canvas id="asset-investments-pie" width="180" height="180"></canvas>
+                    </div>
+                </div>
+                <div class="asset-summary">
+                    <h2>$+</h2>
+                    <div>Gain/Loss Summary</div>
+                </div>
+                <div class="asset-stock-info">
+                    <h2>Stock Info</h2>
+                    <div>Previous Close <span>192.50</span></div>
+                    <div>Day Range <span>189.00–194.00</span></div>
+                    <div>52 Week Range <span>143.00–198.00</span></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+    // Draw line chart for performance
+    function drawLineChart(canvasId, data, color) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let step = canvas.width / (data.length-1);
+        data.forEach((y, i) => {
+            let px = i * step;
+            let py = canvas.height - (y-120)*canvas.height/100;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        data.forEach((y, i) => {
+            let px = i * step;
+            let py = canvas.height - (y-120)*canvas.height/100;
+            ctx.lineTo(px, py);
+        });
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+    drawLineChart('asset-performance-chart', [130, 150, 170, 160, 180, 175, 190], '#38b2ac');
+    // Draw pie chart for investments
+    function drawPieChart(canvasId, data, colors) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let total = data.reduce((a, b) => a + b.value, 0);
+        let start = 0;
+        data.forEach((slice, i) => {
+            let angle = (slice.value / total) * 2 * Math.PI;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width/2, canvas.height/2);
+            ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.width,canvas.height)/2-10, start, start + angle);
+            ctx.closePath();
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+            start += angle;
+        });
+    }
+    drawPieChart('asset-investments-pie', [
+        { label: 'A', value: 40 },
+        { label: 'B', value: 35 },
+        { label: 'C', value: 25 }
+    ], ['#3578e5', '#38b2ac', '#4fd1c5']);
+    </script>
+</body>
+</html>
